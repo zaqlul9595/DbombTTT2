@@ -1,14 +1,15 @@
 SWEP.Author = "cheezbawlz"
 
+--Convars!
+CreateConVar("ttt_can_cook_dbomb", 1, {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Allows the user to cook the grenade or not", 0)
+
+
 if SERVER then
 	AddCSLuaFile()
 end
 
---Convars!
-CreateConVar("ttt_can_cook_dbomb", 1, {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Allows the user to cook the grenade or not", 0)
-
 SWEP.Icon = "vgui/ttt/icon_dbomb"
-SWEP.PrintName = "Discombombulator"
+SWEP.PrintName = "dbomb_name"
 SWEP.Slot = 6
 
 SWEP.Base = "weapon_tttbasegrenade"
@@ -31,8 +32,8 @@ SWEP.ViewModel = "models/weapons/cstrike/c_eq_fraggrenade.mdl"
 SWEP.WorldModel = "models/weapons/w_eq_fraggrenade.mdl"
 
 SWEP.EquipMenuData = {
-   type = "Discombombulator",
-   desc = "An explosive grenade that is identical to the discombobulator...`\nUntil the fuse goes off."
+   type = "item_weapon",
+   desc = "dbomb_desc"
 };
 
 --Overides the base grenade Think function
