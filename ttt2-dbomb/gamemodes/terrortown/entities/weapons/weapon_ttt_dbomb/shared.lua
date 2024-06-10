@@ -1,12 +1,12 @@
 SWEP.Author = "cheezbawlz"
 
---Convars!
-CreateConVar("ttt_can_cook_dbomb", 1, {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Allows the user to cook the grenade or not", 0)
-
-
 if SERVER then
 	AddCSLuaFile()
+	resource.AddFile( "materials/vgui/ttt/icon_dbomb.vmt" )
 end
+
+--Convar!
+CreateConVar("ttt_can_cook_dbomb", 1, {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Allows the user to cook the grenade or not", 0)
 
 SWEP.Icon = "vgui/ttt/icon_dbomb"
 SWEP.PrintName = "dbomb_name"
