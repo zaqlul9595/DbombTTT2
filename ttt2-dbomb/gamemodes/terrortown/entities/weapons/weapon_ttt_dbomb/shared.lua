@@ -40,7 +40,6 @@ SWEP.EquipMenuData = {
 if CLIENT then
 	net.Receive("ttt_update_cook_convar", function()
 		cookCheck = net.ReadUInt(16)
-		print("Cook changed to " .. tostring(cookCheck))
 	end)
 end
 
