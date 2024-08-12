@@ -37,51 +37,32 @@ SWEP.EquipMenuData = {
    desc = "An Explosive Frag Grenade.\nLooks identical to the Discombobulator."
 };
 
-if CLIENT then
-	net.Receive("ttt_update_cook_convar", function()
-		cookCheck = net.ReadUInt(16)
-	end)
-end
+CreateConVar("ttt_can_cook_dbomb", 1, {FCVAR_SERVER_CAN_EXECUTE, FCVAR_ARCHIVE, FCVAR_REPLICATED}, "Allows the user to cook the grenade or not", 0)
 
---Overides the base grenade Think function
---since we want this nade to only start the fuse after we throw it
-function SWEP:Think()
-	-- get local player
-	local ply = self:GetOwner()
-	-- check if player is real
-	if not IsValid(ply) then return end
-	if self:GetPin() then
-		-- this is called when player releases grenade
-		if not ply:KeyDown(IN_ATTACK) then
-			self:StartThrow()
-			self:SetPin(false)
-			self:SendWeaponAnim(ACT_VM_THROW)
-			--reset the detonation time to 5 seconds once thrown
-			self:SetDetTime( CurTime() + 5 )	
-			if SERVER then
+if GetConVar("ttt_can_cook_dbomb"):GetInt() == 0 then
+	function SWEP:Think()
+	   local ply = self:GetOwner()
+	   if not IsValid(ply) then return end
+	   -- returns true when the pin is pulled
+	   if self:GetPin() then
+		  -- we will throw now
+		  if not ply:KeyDown(IN_ATTACK) then
+			 self:StartThrow()
+			 self:SetPin(false)
+			 self:SendWeaponAnim(ACT_VM_THROW)
+			 --reset the detonation time to 5 seconds once thrown
+			 self:SetDetTime( CurTime() + 3 )	
+			 if SERVER then
 				self:GetOwner():SetAnimation( PLAYER_ATTACK1 )
-			end
-		-- this is called while waiting for player to throw
-		else
-			-- if timer expires, blow up in face
-			if SERVER and self:GetDetTime() < CurTime() and cookCheck == 1 then
-				self:BlowInFace()
-			end
-		end
-	elseif self:GetThrowTime() > 0 and self:GetThrowTime() < CurTime() then
-		self:SetDetTime( CurTime() + 5 )
-		self:Throw()
+			 end
+		  end
+	   elseif self:GetThrowTime() > 0 and self:GetThrowTime() < CurTime() then
+		  self:SetDetTime( CurTime() + 3 )
+		  self:Throw()
+	   end
 	end
 end
+
 function SWEP:GetGrenadeName()
 	return "ttt_dbomb_proj"
-end
-if SERVER then
-	hook.Add("TTTPrepareRound","ttt_send_cook_convar",function()
-		cookCheck = GetConVar("ttt_can_cook_dbomb"):GetInt()
-		--send convar to client
-		net.Start("ttt_update_cook_convar")
-		net.WriteUInt(cookCheck, 16)
-		net.Broadcast()
-	end)
 end
